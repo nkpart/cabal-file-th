@@ -1,6 +1,11 @@
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 module Distribution.PackageDescription.TH (
-    -- It. 
+    -- Reads a field from the cabal file in the current working directory
     packageVariable,
+    -- Reads a field from the supplied cabal file
+    packageVariableFrom,
     -- Re-exports so that using `packageVariable` is as simple as importing this package
     Version(..),
     PackageIdentifier(..),
@@ -20,9 +25,15 @@ import Data.List (isSuffixOf)
 import Language.Haskell.TH (Q, Exp, stringE, runIO)
 
 packageVariable :: Text a => (PackageDescription -> a) -> Q Exp
-packageVariable f = stringE . display . f =<< runIO currentPackageDescription
+packageVariable = renderField currentPackageDescription
+
+packageVariableFrom :: Text a => FilePath -> (PackageDescription -> a) -> Q Exp
+packageVariableFrom s = renderField $ fmap packageDescription (readPackageDescription silent s)
 
 ------
+renderField :: Text b => IO a -> (a -> b) -> Q Exp
+renderField pd f = runIO pd >>= stringE . display . f 
+
 currentPackageDescription :: IO PackageDescription
 currentPackageDescription = fmap packageDescription $ do
   dir <- getCurrentDirectory
