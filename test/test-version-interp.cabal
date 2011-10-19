@@ -1,0 +1,9 @@
+Name:                test-version-interp
+Version:             5.5.5
+License:             BSD3
+License-file:        LICENSE
+Build-type:          Simple
+Cabal-version:       >=1.2
+
+Library
+  Exposed-modules:     Test
