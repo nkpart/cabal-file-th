@@ -1,18 +1,19 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+
+-- | Utility functions for reading cabal file fields through template haskell.
 module Distribution.PackageDescription.TH (
-    -- Reads a field from the cabal file in the current working directory
+    -- * Template Haskell functions
     packageVariable,
-    -- Reads a field from the supplied cabal file
     packageVariableFrom,
-    -- Re-exports so that using `packageVariable` is as simple as importing this package
-    Version(..),
+    -- * Cabal file data structures
+    -- | The data structures for the cabal file are re-exported here for ease of use.
+    PackageDescription(..),
     PackageIdentifier(..),
-    PackageDescription(..)
+    Version(..)
     ) where
 
--- For re-exporting.
 import Distribution.PackageDescription 
 import Distribution.Package
 import Distribution.Version
@@ -24,9 +25,14 @@ import System.Directory (getCurrentDirectory, getDirectoryContents)
 import Data.List (isSuffixOf)
 import Language.Haskell.TH (Q, Exp, stringE, runIO)
 
+-- | Renders the package variable specified by the function.
+-- The cabal file interrogated is the first one that is found 
+-- in the current working directory.
 packageVariable :: Text a => (PackageDescription -> a) -> Q Exp
 packageVariable = renderField currentPackageDescription
 
+-- | Renders the package variable specified by the function, from a cabal file
+-- and the given path.
 packageVariableFrom :: Text a => FilePath -> (PackageDescription -> a) -> Q Exp
 packageVariableFrom s = renderField $ fmap packageDescription (readPackageDescription silent s)
 
