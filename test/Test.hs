@@ -4,5 +4,5 @@ module Main where
 import Distribution.PackageDescription.TH
 
 main = do
-  putStrLn $(packageVar (pkgVersion . package))
+  putStrLn $(packageVariable (pkgVersion . package))
 

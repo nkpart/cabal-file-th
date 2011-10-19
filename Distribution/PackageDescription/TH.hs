@@ -1,23 +1,27 @@
 module Distribution.PackageDescription.TH (
-    packageVar,
+    -- It. 
+    packageVariable,
+    -- Re-exports so that using `packageVariable` is as simple as importing this package
     Version(..),
     PackageIdentifier(..),
     PackageDescription(..)
     ) where
 
+-- For re-exporting.
 import Distribution.PackageDescription 
 import Distribution.Package
 import Distribution.Version
 
-import Distribution.Text
-import Distribution.Verbosity 
+import Distribution.Text (Text, display)
+import Distribution.Verbosity (silent)
 import Distribution.PackageDescription.Parse (readPackageDescription)
-import System.Directory
+import System.Directory (getCurrentDirectory, getDirectoryContents)
 import Data.List (isSuffixOf)
-import Language.Haskell.TH
+import Language.Haskell.TH (Q, Exp, stringE, runIO)
 
-packageVar :: Text a => (PackageDescription -> a) -> Q Exp
-packageVar f = stringE . display . f =<< runIO currentPackageDescription
+packageVariable :: Text a => (PackageDescription -> a) -> Q Exp
+packageVariable f = stringE . display . f =<< runIO currentPackageDescription
+
 ------
 currentPackageDescription :: IO PackageDescription
 currentPackageDescription = fmap packageDescription $ do
