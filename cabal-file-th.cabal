@@ -1,6 +1,7 @@
 Name:                cabal-file-th
 Version:             0.1
-Synopsis:            Template haskell expressions for substituting fields from a project's cabal file into source.
+Synopsis:            Template Haskell expressions for reading fields from a project's cabal file.
+Description:         Template Haskell expressions for reading fields from a project's cabal file.
 Homepage:            http://github.com/nkpart/cabal-file-th
 License:             BSD3
 License-file:        LICENSE
@@ -8,8 +9,13 @@ Author:              Nick Partridge
 Maintainer:          nkpart@gmail.com
 Category:            Development
 Build-type:          Simple
-Extra-source-files:  README.md
+Extra-source-files:  README.md, test/Test.hs, test/test-version-interp.cabal
 Cabal-version:       >= 1.9
+
+source-repository head
+  type: git
+  location: git://github.com/nkpart/cabal-file-th.git
+  
 
 Library
   Exposed-modules:   Distribution.PackageDescription.TH
