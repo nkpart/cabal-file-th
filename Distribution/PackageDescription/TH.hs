@@ -48,6 +48,7 @@ currentPackageDescription = fmap packageDescription $ do
     (c:_) -> readPackageDescription silent c
     [] -> error $ "Couldn't find a cabal file in the current working directory (" ++ dir ++ ")"
 
+cabalFiles :: FilePath -> IO [FilePath]
 cabalFiles dir = do
   files <- getDirectoryContents dir
   return $ filter (".cabal" `isSuffixOf`) files
