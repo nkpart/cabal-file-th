@@ -20,7 +20,7 @@ source-repository head
 Library
   Exposed-modules:   Distribution.PackageDescription.TH
   Build-depends:     base >= 4 && < 5,
-                     Cabal >= 1.10 && < 1.13,
+                     Cabal >= 1.10 && < 1.15,
                      directory,
                      template-haskell
   Ghc-options: -Wall
