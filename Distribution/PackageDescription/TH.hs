@@ -31,7 +31,7 @@ import Language.Haskell.TH (Q, Exp, stringE, runIO)
 newtype DocString = DocString String
 
 instance Text DocString where
-  parse = DocString <$> (readS_to_P read)
+  parse = DocString `fmap` (readS_to_P read)
   disp (DocString s) = text s
 
 -- | Provides a Text instance for String, allowing text fields to be used
