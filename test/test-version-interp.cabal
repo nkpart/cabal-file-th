@@ -1,9 +1,12 @@
 Name:                test-version-interp
 Version:             5.5.5
 License:             BSD3
-License-file:        LICENSE
 Build-type:          Simple
 Cabal-version:       >=1.2
 
+copyright: (c) 1953 Gumby
+
 Library
   Exposed-modules:     Test
+  build-depends: base, cabal-file-th
+

@@ -7,6 +7,7 @@ module Distribution.PackageDescription.TH (
     -- * Template Haskell functions
     packageVariable,
     packageVariableFrom,
+    packageString,
     -- * Cabal file data structures
     -- | The data structures for the cabal file are re-exported here for ease of use.
     PackageDescription(..),
@@ -18,12 +19,26 @@ import Distribution.PackageDescription
 import Distribution.Package
 import Distribution.Version
 
-import Distribution.Text (Text, display)
+import Distribution.Text
+import Distribution.Compat.ReadP
 import Distribution.Verbosity (silent)
+import Text.PrettyPrint
 import Distribution.PackageDescription.Parse (readPackageDescription)
 import System.Directory (getCurrentDirectory, getDirectoryContents)
 import Data.List (isSuffixOf)
 import Language.Haskell.TH (Q, Exp, stringE, runIO)
+
+newtype DocString = DocString String
+
+instance Text DocString where
+  parse = DocString <$> (readS_to_P read)
+  disp (DocString s) = text s
+
+-- | Provides a Text instance for String, allowing text fields to be used
+--   in `packageVariable`. Use it composed with an accessor, eg.
+--       packageVariable (packageString . copyright)
+packageString :: String -> DocString
+packageString = DocString
 
 -- | Renders the package variable specified by the function.
 -- The cabal file interrogated is the first one that is found 
@@ -38,7 +53,10 @@ packageVariableFrom s = renderField $ fmap packageDescription (readPackageDescri
 
 ------
 renderField :: Text b => IO a -> (a -> b) -> Q Exp
-renderField pd f = runIO pd >>= stringE . display . f 
+renderField pd f = renderFieldS pd (display . f)
+
+renderFieldS :: IO a -> (a -> String) -> Q Exp
+renderFieldS pd f = runIO pd >>= stringE . f
 
 currentPackageDescription :: IO PackageDescription
 currentPackageDescription = fmap packageDescription $ do
@@ -59,7 +77,7 @@ Smart ways of getting the cabal file:
   * Get this module name, use TH.location and loc_module. Parse each
     cabal file in the cwd and look for references to this module
     in each thing.
-  
+
 
   -}
 
