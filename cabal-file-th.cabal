@@ -24,10 +24,10 @@ Library
                      directory,
                      template-haskell,
                      pretty
-  Ghc-options: -Wall -Werror -O2
+  Ghc-options: -Wall 
   
 Test-suite test
-  Ghc-options: -Wall -Werror -O2
+  Ghc-options: -Wall
   Main-is:  Test.hs
   Hs-source-dirs:    test
   Type:     exitcode-stdio-1.0
