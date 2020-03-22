@@ -13,7 +13,11 @@ module Distribution.PackageDescription.TH (
     -- | The data structures for the cabal file are re-exported here for ease of use.
     PackageDescription(..),
     PackageIdentifier(..),
+#if MIN_VERSION_Cabal(2,0,0)
+    module Distribution.Version
+#else
     Version(..)
+#endif
     ) where
 
 import Distribution.PackageDescription 
