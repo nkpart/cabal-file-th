@@ -21,7 +21,11 @@ module Distribution.PackageDescription.TH (
     ) where
 
 import Distribution.PackageDescription 
+#if MIN_VERSION_Cabal(3,4,1)
+import Distribution.Package ()
+#else
 import Distribution.Package
+#endif
 import Distribution.Version
 
 -- Distribution.Text is deprecated and Distribution.Compat.ReadP
@@ -38,10 +42,14 @@ import System.Directory (getCurrentDirectory, getDirectoryContents)
 import Data.List (isSuffixOf)
 import Language.Haskell.TH (Q, Exp, stringE, runIO)
 
+-- readGenericPackageDescription was moved to a different module in Cabal-3.8.1.0
 -- readPackageDescription was deprecated by readGenericPackageDescription
--- which was introduced in Cabal-2.0.0.2.
--- readPackageDescription was removed in Cabal-2.2.0.0
-#if MIN_VERSION_Cabal(2,2,0)
+-- which was introduced in Cabal-2.0.0.2
+-- readPackageDescription was removed in Cabal-2.2.0.0.
+#if MIN_VERSION_Cabal(3,8,1)
+import Distribution.Simple.PackageDescription (readGenericPackageDescription)
+readPkgDesc = readGenericPackageDescription
+#elif MIN_VERSION_Cabal(2,2,0)
 import Distribution.PackageDescription.Parsec (readGenericPackageDescription)
 readPkgDesc = readGenericPackageDescription
 #else
