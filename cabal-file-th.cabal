@@ -1,5 +1,5 @@
 Name:                cabal-file-th
-Version:             0.2.8
+Version:             0.2.9
 Synopsis:            Template Haskell expressions for reading fields from a project's cabal file.
 Description:         Template Haskell expressions for reading fields from a project's cabal file.
 Homepage:            http://github.com/nkpart/cabal-file-th
@@ -14,7 +14,7 @@ Cabal-version:       >= 1.9
 
 source-repository head
   type: git
-  location: git://github.com/nkpart/cabal-file-th.git
+  location: https://github.com/nkpart/cabal-file-th.git
   
 Library
   Exposed-modules:   Distribution.PackageDescription.TH
@@ -32,4 +32,3 @@ Test-suite test
   Type:     exitcode-stdio-1.0
   Build-depends: base >= 4 && < 5,
                  cabal-file-th, Cabal
-

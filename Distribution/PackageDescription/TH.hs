@@ -36,6 +36,9 @@ import Distribution.Pretty
 import Distribution.Text
 import Distribution.Compat.ReadP
 #endif
+#if MIN_VERSION_Cabal(3,14,0)
+import Distribution.Utils.Path (makeSymbolicPath)
+#endif
 import Distribution.Verbosity (Verbosity, silent)
 import Text.PrettyPrint
 import System.Directory (getCurrentDirectory, getDirectoryContents)
@@ -48,7 +51,11 @@ import Language.Haskell.TH (Q, Exp, stringE, runIO)
 -- readPackageDescription was removed in Cabal-2.2.0.0.
 #if MIN_VERSION_Cabal(3,8,1)
 import Distribution.Simple.PackageDescription (readGenericPackageDescription)
-readPkgDesc = readGenericPackageDescription
+readPkgDesc verbosity filepath = readGenericPackageDescription verbosity
+#if MIN_VERSION_Cabal(3,14,0)
+  Nothing $ makeSymbolicPath
+#endif
+  filepath
 #elif MIN_VERSION_Cabal(2,2,0)
 import Distribution.PackageDescription.Parsec (readGenericPackageDescription)
 readPkgDesc = readGenericPackageDescription
